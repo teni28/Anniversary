@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Anniversary Michelle ❤️</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@300;400;600&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #ff4b72;
+            --secondary-color: #ff85a2;
+            --bg-gradient: linear-gradient(135deg, #0f0c20 0%, #2b1029 50%, #1a0918 100%);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --text-color: #ffffff;
+            --text-muted: #e0d0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* =========================================================
+           1. FULL SCREEN LOCK OVERLAY (Only thing visible at start)
+           ========================================================= */
+        #lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg-gradient);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .lock-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 3rem 2rem;
+            border-radius: 24px;
+            text-align: center;
+            width: 90%;
+            max-width: 420px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+        }
+
+        .lock-card h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .lock-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 1.8rem;
+        }
+
+        .lock-card input {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            background: rgba(0, 0, 0, 0.4);
+            color: #fff;
+            text-align: center;
+            font-size: 1.1rem;
+            outline: none;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            transition: border 0.3s ease;
+        }
+
+        .lock-card input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(255, 75, 114, 0.3);
+        }
+
+        .lock-card button {
+            width: 100%;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 0.9rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 75, 114, 0.4);
+        }
+
+        .lock-card button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        /* Error message style */
+        #error-msg {
+            color: #ff4b72;
+            font-size: 0.88rem;
+            margin-top: 1rem;
+            display: none;
+            font-weight: 400;
+        }
+
+        /* =========================================================
+           2. MAIN WEBSITE CONTENT (HIDDEN UNTIL UNLOCKED)
+           ========================================================= */
+        #main-website {
+            display: none;
+            /* Keeps main site completely hidden initially */
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .counter-section,
+        section {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .time-box {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .time-box .number {
+            font-size: 2rem;
+            font-weight: 600;
+            display: block;
+        }
+
+        .time-box .label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .heart-container {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        /* Floating hearts at the top and bottom of the image */
+        .heart-label-top,
+        .heart-label-bottom {
+            font-size: 1.5rem;
+            letter-spacing: 15px;
+            margin: 5px 0;
+            animation: heartPulse 1.5s infinite ease-in-out;
+        }
+
+        /* Make the original image responsive and clean */
+        .heart-container img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 2px solid var(--secondary-color);
+            box-shadow: 0 0 15px rgba(255, 75, 114, 0.4);
+        }
+
+        /* Subtle pulse animation for the hearts */
+        @keyframes heartPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.15);
+                opacity: 1;
+            }
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 1.5rem;
+            border-left: 2px solid var(--primary-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: '❤️';
+            position: absolute;
+            left: -2.3rem;
+            top: 0;
+            background: #1a0918;
+            border-radius: 50%;
+            padding: 2px;
+            font-size: 0.9rem;
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .timeline-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .timeline-img {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 0.8rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .reasons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .reason-card {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            border-radius: 15px;
+        }
+
+        .unlock-btn {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 0.8rem 2rem;
+            font-size: 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .letter-content {
+            display: none;
+            text-align: left;
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border-left: 3px solid var(--primary-color);
+            line-height: 1.8;
+            color: var(--text-muted);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .timer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 1. FULLSCREEN PASSWORD LOCK -->
+    <div id="lock-screen">
+        <div class="lock-card">
+            <h2>For Mon Coeur ❤️ </h2>
+            <p>Enter The Password To Unlock Your Anniversary Message Michelle:</p>
+
+            <input type="password" id="password-input" placeholder="Enter password..." onkeydown="checkEnterKey(event)"
+                autofocus>
+
+            <button onclick="unlockWebsite()">Unlock ❤️</button>
+
+            <!-- CUSTOMIZABLE ERROR MESSAGE -->
+            <div id="error-msg">Incorrect password! Try again 💕</div>
+        </div>
+    </div>
+
+    <!-- 2. MAIN WEBSITE (Hidden until password is correct) -->
+    <div id="main-website">
+        <div class="container">
+
+            <header>
+                <h1>Happy 4 Month Anniversary Michelle,! Mon Coeur! ❤️</h1>
+                <p class="subtitle">Thanks For being an amazing Girlfriend, couldn't ask for anyone better or more
+                    beautiful than you. You are really One of the best things that ever happened to me.</p>
+            </header>
+
+            <div class="counter-section">
+                <div style="color: var(--secondary-color); font-weight: 600;">WE HAVE BEEN TOGETHER FOR:</div>
+                <div class="timer-grid">
+                    <div class="time-box"><span class="number" id="days">0</span><span class="label">Days</span></div>
+                    <div class="time-box"><span class="number" id="hours">0</span><span class="label">Hours</span></div>
+                    <div class="time-box"><span class="number" id="minutes">0</span><span class="label">Minutes</span>
+                    </div>
+                    <div class="time-box"><span class="number" id="seconds">0</span><span class="label">Seconds</span>
+                    </div>
+                </div>
+            </div>
+            <section>
+                <h2>Our Journey</h2>
+                <div class="timeline">
+
+                    <!-- Timeline Item 1 -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">April 14, 2026</div>
+                        <div class="timeline-title">The Day I Asked you to Be My Girlfriend</div>
+                        <p class="timeline-desc">I still remember how nervous I was to even sit next to you😂.
+                            Eventually I looked into your heart melting eyes and asked you the big question. After what
+                            felt like forever, you said the 1 word that made me the happiest boy in the whole school,Yes
+                            From that day you said yes
+                            , Life just Became better, I was acc happy going to school knowing i would see your pretty
+                            face.</p>
+                        <!-- Replace image URL or keep placeholder -->
+                        <div class="heart-container">
+                            <div class="heart-label-top">❤️ 💖 ❤️</div>
+                            <img src="https://i.postimg.cc/cCmtNzF1/IMG-20260811-WA0011.jpg" alt="Memory"
+                                class="timeline-img">
+                            <div class="heart-label-bottom">💖 ❤️ 💖</div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline Item 2 -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">May 14, 2026</div>
+                        <div class="timeline-title">Our First Anniversary</div>
+                        <p class="timeline-desc">You were resting On my Shoulder and we were watching a movie,
+                            eventually we went for physics then when we got back you gave me a letter and said happy 1
+                            month Anniversary. It seemed like i forgot(i didn't). I just got the current date wrong,
+                            Thinking it
+                            was the 13th. You said dw its fine, In that moment i knew i picked the rigt one. Alot of
+                            girls would have gotten mad but you didn't. I love how understanding you were, it made me
+                            see how flawless and perfect you were. I Later bought you a small gift. When i saw your
+                            reaction I just remebered thinking to myself "wow she really is
+                            wife material" </p>
+                        <div class="heart-container">
+                            <div class="heart-label-top">❤️ 💖 ❤️</div>
+                            <img src="https://i.postimg.cc/9MqyvVRD/1786461511916.jpg" alt="Memory"
+                                class="timeline-img>" <div class="heart-label-bottom">💖 ❤️ 💖
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 3 -->
+                <div class="timeline-item">
+                    <div class="timeline-date">Today</div>
+                    <div class="timeline-title">Celebrating Our beautiful Relationship, Many more Anniversaries to come
+                        :]</div>
+                    <p class="timeline-desc">No matter how far away we are from each other my love for you grows with
+                        each passing
+                        day.
+                    </p>
+                </div>
+
+        </div>
+        </section>
+
+        <section>
+            <h2>Some Of The Many Reasons I Love You</h2>
+            <div class="reasons-grid">
+                <div class="reason-card"><span style="font-size: 2rem;">✨</span>
+                    <p>Your smile that instantly brightens my day.</p>
+                </div>
+                <div class="reason-card"><span style="font-size: 2rem;">🎙️</span>
+                    <p>How thoughtful you are and the fact i can talk to you about anything.</p>
+                </div>
+                <div class="reason-card"><span style="font-size: 2rem;">💖</span>
+                    <p>How incredibly caring, sweet, amazing and beautiful you are.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>A Letter For You</h2>
+            <button class="unlock-btn" onclick="toggleLetter()">Open Letter 💌</button>
+            <div class="letter-content" id="loveLetter">
+                <p>Dear Michelle,</p><br>
+                <p>Happy 4-Month Anniversaryyyyyyyyyyy! Spent 1 week typing 593 lines of code to make this website to
+                    tell you this from the bottom of my heart. Wow, 4 months already🙀😍😍. Feels like forever to me,
+                    hope we last forever—saying this because I want to be with you forever. IK boys say this all the
+                    time, but you're not like other girls at all. You are nice, caring, amazing, sweet, thoughtful,
+                    understanding, and breathtaking. I think your parents took the phrase "a sight for sore eyes" a
+                    little bit too far 🤣. Every time I see you I can't help but say daymmmm she is hot asf🥵. I will
+                    never get tired or bored of you, and I'm not just saying it for saying's sake, I'm saying it because
+                    you are the first girl to show me what love really means. We could spend a year apart and I would
+                    still love you the same way I did on April 14. I don't need to do anything with anyone else when I
+                    have someone as amazing and loyal as you. You might just be the biggest and sexiest 😏 green flag
+                    I've ever seen. You're the type of person authors write novels about, the type of beauty painters
+                    line up to paint. Even still, no amount of paint can capture your beauty. IK as you are reading this
+                    I won't be by your side, but I just wanna give you a really big hug RN. I really miss you, I think
+                    about you every single day. Just thinking about you brings a little smile to my face. I miss so many
+                    things about you: your smile, your sarcasm, your hugs, your spine-chilling laughter the whole class
+                    always complained about (I secretly like it), your beautiful voice, your soft hands, your cute
+                    cheeks, and your amazing personality. I would go on, but I'm trying to keep the letter short😂. From
+                    the first day I liked you in Year 9, I always knew we were meant to be together—you complimented me
+                    perfectly. Remembered thinking about how you would make a great wife towards the end of Year 10, 3rd
+                    term. Thank God I waited, and I shall continue to wait for the next time I get to see you in person,
+                    no matter how long it is. Cause you are just that kind of girl someone waits 365 days to see, so
+                    what on God's green earth would make me want another girl when I have the best one there is? You are
+                    the type of person worthy of waiting 365 days to see. I just wanted to let you know I love you more
+                    than anything and will always love you. Still don't know why you're so damn cute all the time, even
+                    cuter than Obba. Honestly grateful to God for giving me such an amazing girlfriend—and a beautiful
+                    one at that. These past 122 days have been magical; every anniversary will always remind me how
+                    lucky I am to have you. I shall try to make every anniversary special because you are a special
+                    person. I can't wait to see both of us make it in life, because your happiness is my happiness. In
+                    the next four days, I hope we open our eyes to the results we wanna see. I love youuu sooo muchh
+                    babee. Michelle you really mean everything to me. Have a wonderful day, Mon Coeur.
+                </p><br>
+                <p>Forever & Always,<br><strong> My Beautiful Girlfriend Michelle Ayomide Pamilerin Adegoke :]</strong>
+                </p>
+            </div>
+        </section>
+
+        <footer>Made with ❤️ for the prettiest girl i've ever seen, Michelle</footer>
+
+    </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // =========================================================
+        // A. EDIT YOUR PASSWORD & ERROR MESSAGE HERE
+        // =========================================================
+        const CORRECT_PASSWORD = "SHARWAMA"; // <--- CHANGE THIS to your date or secret word
+        const CUSTOM_ERROR_TEXT = "Wrong password! Hint: Try Your Favorite Food All Capital Letters(8 Letters), You would never get tired of it, Mon Coeur you should know this 😭, you would buy it everytime if you had the chance 😂. "; // <--- EDIT YOUR ERROR HINT HERE
+
+        function unlockWebsite() {
+            const userPassword = document.getElementById("password-input").value;
+            const lockScreen = document.getElementById("lock-screen");
+            const mainWebsite = document.getElementById("main-website");
+            const errorMsg = document.getElementById("error-msg");
+
+            if (userPassword === CORRECT_PASSWORD) {
+                // Fade out lock screen
+                lockScreen.style.opacity = "0";
+
+                setTimeout(() => {
+                    lockScreen.style.display = "none"; // Fully hide lock screen
+                    mainWebsite.style.display = "block"; // Show main website
+
+                    setTimeout(() => {
+                        mainWebsite.style.opacity = "1"; // Smooth fade-in
+                    }, 50);
+                }, 600);
+
+            } else {
+                // Show custom error message
+                errorMsg.innerText = CUSTOM_ERROR_TEXT;
+                errorMsg.style.display = "block";
+                document.getElementById("password-input").value = ""; // Clear input box
+            }
+        }
+
+        function checkEnterKey(event) {
+            if (event.key === "Enter") {
+                unlockWebsite();
+            }
+        }
+
+        // =========================================================
+        // B. TIMER & LETTER LOGIC
+        // =========================================================
+        const START_DATE = "2026-04-14T00:00:00"; // <--- SET YOUR START DATE HERE
+
+        function updateTimer() {
+            const startDate = new Date(START_DATE);
+            const now = new Date();
+            const difference = now - startDate;
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((difference / 1000 / 60) % 60);
+            const seconds = Math.floor((difference / 1000) % 60);
+
+            document.getElementById("days").innerText = days;
+            document.getElementById("hours").innerText = hours;
+            document.getElementById("minutes").innerText = minutes;
+            document.getElementById("seconds").innerText = seconds;
+        }
+
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        function toggleLetter() {
+            const letter = document.getElementById("loveLetter");
+            letter.style.display = (letter.style.display === "block") ? "none" : "block";
+        }
+    </script>
+</body>
+
+</html>
